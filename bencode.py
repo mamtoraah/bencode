@@ -44,12 +44,12 @@ def bdecode(data: str) -> BencodeType:
   """
   def parse_integer(data, pos):
     pos += 1
-    end = data.index(b"e", pos)
+    end = data.index("e", pos)
     num = int(data[pos:end])
     return num, end + 1
 
   def parse_string(data, pos):
-    colon = data.index(b":", pos)
+    colon = data.index(":", pos)
     length = int(data[pos:colon])
     start = colon + 1
     end = start + length
@@ -60,7 +60,7 @@ def bdecode(data: str) -> BencodeType:
     pos += 1
     result = []
     while data[pos] != ord("e"):
-      item, pos = parse_func[data[pos]](data, pos)
+      item, pos = parse_func.get(data[pos], parse_string)(data, pos)
       result.append(item)
     return result, pos + 1
 
@@ -70,17 +70,17 @@ def bdecode(data: str) -> BencodeType:
     while data[pos] != ord("e"):
       key, pos = parse_string(data, pos)
       print(f"{data=}, {pos=}")
-      value, pos = parse_func[data[pos]](data, pos)
+      value, pos = parse_func.get(data[pos], parse_string)(data, pos)
       result[key] = value
     return result, pos + 1
 
   parse_func = {
-    ord("i"): parse_integer,
-    ord("l"): parse_list,
-    ord("d"): parse_dict,
+    "i": parse_integer,
+    "l": parse_list,
+    "d": parse_dict,
   }
 
-  return parse_func[data[0]](data, 0)[0]
+  return parse_func.get(data[0], parse_string)(data, 0)[0]
 
 
 if __name__ == "__main__":
