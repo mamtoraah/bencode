@@ -24,7 +24,7 @@ class BencodeBdecodeTests(unittest.TestCase):
         self.assertEqual(encoded, 'd4:key16:value14:key26:value2e')
 
     def test_bdecode_list(self):
-        encoded = 'l3:1i2ei3ee'
+        encoded = 'li1ei2ei3ee'
         decoded = bdecode(encoded)
         self.assertEqual(decoded, [1, 2, 3])
 
@@ -39,7 +39,7 @@ class BencodeBdecodeTests(unittest.TestCase):
         self.assertEqual(decoded, 42)
 
     def test_bdecode_dict(self):
-        encoded = 'd4:key15:value14:key25:value2e'
+        encoded = 'd4:key16:value14:key26:value2e'
         decoded = bdecode(encoded)
         self.assertEqual(decoded, {'key1': 'value1', 'key2': 'value2'})
 

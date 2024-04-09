@@ -49,6 +49,7 @@ def bdecode(data: str) -> BencodeType:
     return num, end + 1
 
   def parse_string(data, pos):
+    # print(f"{data=}, {pos=}")
     colon = data.index(":", pos)
     length = int(data[pos:colon])
     start = colon + 1
@@ -59,7 +60,7 @@ def bdecode(data: str) -> BencodeType:
   def parse_list(data, pos):
     pos += 1
     result = []
-    while data[pos] != ord("e"):
+    while data[pos] != "e":
       item, pos = parse_func.get(data[pos], parse_string)(data, pos)
       result.append(item)
     return result, pos + 1
@@ -67,7 +68,7 @@ def bdecode(data: str) -> BencodeType:
   def parse_dict(data, pos):
     pos += 1
     result = {}
-    while data[pos] != ord("e"):
+    while data[pos] != "e":
       key, pos = parse_string(data, pos)
       print(f"{data=}, {pos=}")
       value, pos = parse_func.get(data[pos], parse_string)(data, pos)
